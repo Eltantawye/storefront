@@ -14,25 +14,85 @@ These are the notes from a meeting with the frontend developer that describe wha
 - [OPTIONAL] Top 5 most popular products
 - [OPTIONAL] Products by category (args: product category)
 
-#### Users
+### Users
 
-- Index [token required]: /users
-- Show [token required] /users/:id
-- Create N[token required] /users
+- Get all users
 
-#### Orders
+```http
+  GET /users  [token required]
+```
 
-- Current Order by user (args: user id)[token required]: /orders
-- [OPTIONAL] Completed Orders by user (args: user id)[token required]
+- Show user by id
 
-## Data Shapes
+```http
+  GET /users/:id  [token required]
+```
 
-#### Product
+- Create user
 
-- id
-- name
-- price
-- [OPTIONAL] category
+```http
+  POST /users  [token required]
+```
+
+- Authenticate user using user data
+
+```http
+  GET /auth
+```
+
+- Seeding for creating user for testing purpose
+
+```http
+  POST /users
+```
+
+```http
+{
+    firstName: "super",
+    lastName: "admin",
+    password: "super123",
+  };
+```
+
+### Products
+
+- Get all products
+
+```http
+  GET /products
+```
+
+- Get products by id
+
+```http
+  GET /products/:id
+```
+
+- Add products
+
+```http
+  POST /products [token required]
+```
+
+### Orders
+
+- Get all orders for the authenticated user
+
+```http
+  GET /orders  [token required]
+```
+
+- add order
+
+```http
+  POST /orders [token required]
+```
+
+- Add products to order
+
+```http
+  POST /orders/:id/products [token required]
+```
 
 #### User
 

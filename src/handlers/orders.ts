@@ -49,7 +49,7 @@ const addProduct = async (_req: Request, res: Response) => {
 const orders_routes = (app: express.Application) => {
   app.get("/orders", verifyAuthToken, index);
   app.post("/orders", verifyAuthToken, create);
-  app.post("/orders/:id/products", addProduct);
+  app.post("/orders/:id/products", verifyAuthToken, addProduct);
 };
 
 export default orders_routes;
