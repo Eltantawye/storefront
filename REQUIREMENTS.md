@@ -6,46 +6,27 @@ These are the notes from a meeting with the frontend developer that describe wha
 
 ## API Endpoints
 
-#### Products
-
-- Index: /products
-- Show: /products/:id
-- Create [token required]: /products
-- [OPTIONAL] Top 5 most popular products
-- [OPTIONAL] Products by category (args: product category)
-
 ### Users
-
-- Get all users
-
+* Get all users
 ```http
   GET /users  [token required]
 ```
-
-- Show user by id
-
+* Show user by id
 ```http
   GET /users/:id  [token required]
 ```
-
-- Create user
-
+* Create user
 ```http
   POST /users  [token required]
 ```
-
-- Authenticate user using user data
-
+* Authenticate user using user data
 ```http
-  GET /auth
+  GET /auth 
 ```
-
-- Seeding for creating user for testing purpose
-
+* Seeding for creating user for testing purpose
 ```http
-  POST /users
+  POST /users  
 ```
-
 ```http
 {
     firstName: "super",
@@ -55,44 +36,40 @@ These are the notes from a meeting with the frontend developer that describe wha
 ```
 
 ### Products
-
-- Get all products
-
+* Get all products 
 ```http
-  GET /products
+  GET /products  
 ```
-
-- Get products by id
-
+* Get products by it
 ```http
-  GET /products/:id
+  GET /products/:id 
 ```
-
-- Add products
-
+* Add products
 ```http
   POST /products [token required]
 ```
 
 ### Orders
-
-- Get all orders for the authenticated user
-
+* Get all orders for the authenticated user 
 ```http
   GET /orders  [token required]
 ```
-
-- add order
-
+* add order
 ```http
   POST /orders [token required]
 ```
-
-- Add products to order
-
+* Add products to order
 ```http
   POST /orders/:id/products [token required]
 ```
+## Data Shapes
+
+#### Product
+
+- id
+- name
+- price
+
 
 #### User
 
