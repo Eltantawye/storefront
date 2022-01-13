@@ -65,19 +65,13 @@ var index = function (_req, res) { return __awaiter(void 0, void 0, void 0, func
         }
     });
 }); };
-// const show = async (_req: Request, res: Response) => {
-//   const product = await store.show(_req.params.id);
-//   res.json(product);
-// };
 var create = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var order, newOrder, err_1;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 order = {
-                    product_id: req.body.product_id,
-                    quantity: req.body.quantity,
-                    user_id: req.body.user_id,
+                    user_id: parseInt(req.body.user_id),
                     status: req.body.status
                 };
                 _a.label = 1;
@@ -97,8 +91,34 @@ var create = function (req, res) { return __awaiter(void 0, void 0, void 0, func
         }
     });
 }); };
+var addProduct = function (_req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var orderId, productId, quantity, addedProduct, err_2;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                orderId = _req.params.id;
+                productId = _req.body.productId;
+                quantity = parseInt(_req.body.quantity);
+                _a.label = 1;
+            case 1:
+                _a.trys.push([1, 3, , 4]);
+                return [4 /*yield*/, store.addProduct(quantity, orderId, productId)];
+            case 2:
+                addedProduct = _a.sent();
+                res.json(addedProduct);
+                return [3 /*break*/, 4];
+            case 3:
+                err_2 = _a.sent();
+                res.status(400);
+                res.json(err_2);
+                return [3 /*break*/, 4];
+            case 4: return [2 /*return*/];
+        }
+    });
+}); };
 var orders_routes = function (app) {
     app.get("/orders", auth_1.verifyAuthToken, index);
     app.post("/orders", auth_1.verifyAuthToken, create);
+    app.post("/orders/:id/products", addProduct);
 };
 exports["default"] = orders_routes;

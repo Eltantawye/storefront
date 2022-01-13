@@ -54,7 +54,7 @@ var OrderStore = /** @class */ (function () {
                         return [4 /*yield*/, database_1["default"].connect()];
                     case 1:
                         conn = _a.sent();
-                        sql = "SELECT * FROM orders WHERE user_id=($1)";
+                        sql = "SELECT * FROM orders INNER JOIN orders_products ON orders.id = orders_products.order_id WHERE user_id=($1)";
                         return [4 /*yield*/, conn.query(sql, [userId])];
                     case 2:
                         result = _a.sent();
@@ -62,7 +62,7 @@ var OrderStore = /** @class */ (function () {
                         return [2 /*return*/, result.rows];
                     case 3:
                         error_1 = _a.sent();
-                        throw new Error("ERR" + error_1);
+                        throw new Error("Could not return orders" + error_1);
                     case 4: return [2 /*return*/];
                 }
             });
@@ -75,16 +75,11 @@ var OrderStore = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         _a.trys.push([0, 3, , 4]);
-                        sql = "INSERT INTO orders (product_id,quantity,user_id,status) VALUES($1, $2, $3, $4) RETURNING *";
+                        sql = "INSERT INTO orders (user_id,status) VALUES($1, $2) RETURNING *";
                         return [4 /*yield*/, database_1["default"].connect()];
                     case 1:
                         conn = _a.sent();
-                        return [4 /*yield*/, conn.query(sql, [
-                                order.product_id,
-                                order.quantity,
-                                order.user_id,
-                                order.status,
-                            ])];
+                        return [4 /*yield*/, conn.query(sql, [order.user_id, order.status])];
                     case 2:
                         result = _a.sent();
                         getOrder = result.rows[0];
@@ -92,7 +87,32 @@ var OrderStore = /** @class */ (function () {
                         return [2 /*return*/, getOrder];
                     case 3:
                         err_1 = _a.sent();
-                        throw new Error("Could not add user $. Error: ".concat(err_1));
+                        throw new Error("Could not add order $. Error: ".concat(err_1));
+                    case 4: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    OrderStore.prototype.addProduct = function (quantity, orderId, productId) {
+        return __awaiter(this, void 0, void 0, function () {
+            var sql, conn, result, order, err_2;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 3, , 4]);
+                        sql = "INSERT INTO orders_products (quantity, order_id, product_id) VALUES($1, $2, $3) RETURNING *";
+                        return [4 /*yield*/, database_1["default"].connect()];
+                    case 1:
+                        conn = _a.sent();
+                        return [4 /*yield*/, conn.query(sql, [quantity, orderId, productId])];
+                    case 2:
+                        result = _a.sent();
+                        order = result.rows[0];
+                        conn.release();
+                        return [2 /*return*/, order];
+                    case 3:
+                        err_2 = _a.sent();
+                        throw new Error("Could not add product ".concat(productId, " to order ").concat(orderId, ": ").concat(err_2));
                     case 4: return [2 /*return*/];
                 }
             });

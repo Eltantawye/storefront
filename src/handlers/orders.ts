@@ -18,16 +18,9 @@ const index = async (_req: Request, res: Response) => {
   } catch (error) {}
 };
 
-// const show = async (_req: Request, res: Response) => {
-//   const product = await store.show(_req.params.id);
-//   res.json(product);
-// };
-
 const create = async (req: Request, res: Response) => {
   const order: Order = {
-    product_id: req.body.product_id,
-    quantity: req.body.quantity,
-    user_id: req.body.user_id,
+    user_id: parseInt(req.body.user_id),
     status: req.body.status,
   };
   try {
@@ -39,10 +32,24 @@ const create = async (req: Request, res: Response) => {
   }
 };
 
+const addProduct = async (_req: Request, res: Response) => {
+  const orderId: string = _req.params.id;
+  const productId: string = _req.body.productId;
+  const quantity: number = parseInt(_req.body.quantity);
+
+  try {
+    const addedProduct = await store.addProduct(quantity, orderId, productId);
+    res.json(addedProduct);
+  } catch (err) {
+    res.status(400);
+    res.json(err);
+  }
+};
+
 const orders_routes = (app: express.Application) => {
   app.get("/orders", verifyAuthToken, index);
-
   app.post("/orders", verifyAuthToken, create);
+  app.post("/orders/:id/products", addProduct);
 };
 
 export default orders_routes;

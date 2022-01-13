@@ -39,6 +39,8 @@ describe("Test orders endpoint", () => {
   let token: string;
   let userId: number;
   let productId: number;
+  let orderdId: number;
+
   beforeAll(async () => {
     const req = await request.get("/seed");
     token = req.body;
@@ -53,6 +55,15 @@ describe("Test orders endpoint", () => {
       })
       .set({ authorization: `Bearer ${req.body}` });
     productId = productReq.body.id;
+    //add order
+    const orderReq = await request
+      .post("/orders")
+      .send({
+        user_id: decodedToken.user.id,
+        status: "active",
+      })
+      .set({ authorization: `Bearer ${req.body}` });
+    orderdId = orderReq.body.id;
   });
 
   it("should add order successfully", async () => {
@@ -61,8 +72,6 @@ describe("Test orders endpoint", () => {
     const order = await request
       .post("/orders")
       .send({
-        product_id: productId,
-        quantity: 5,
         user_id: userId,
         status: "active",
       })
@@ -79,12 +88,24 @@ describe("Test orders endpoint", () => {
       .send({
         product_id: "not vaild id",
         quantity: 5,
-        user_id: userId,
-        status: "active",
       })
       .set(header);
 
     expect(order.status).toEqual(400);
+  });
+
+  it("should add product to order successfully", async () => {
+    let header = { authorization: `Bearer ${token}` };
+
+    const order = await request
+      .post(`/orders/${orderdId}/products`)
+      .send({
+        product_id: productId,
+        quantity: 5,
+      })
+      .set(header);
+
+    expect(order.status).toEqual(200);
   });
 
   it("should get all orders of authenticated user", async () => {

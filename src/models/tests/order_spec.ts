@@ -20,18 +20,22 @@ describe("Order Model", () => {
       price: 22,
     });
     productInOrderId = product.id as number;
-    await store.create({
-      product_id: product.id as number,
-      quantity: 10,
+    const addOrder = await store.create({
       user_id: user.id as number,
       status: "active",
     });
+
+    //add product to user order
+    await store.addProduct(5, `${addOrder.id}`, `${product.id}`);
   });
   it("Shoud have index method", () => {
     expect(store.index).toBeDefined();
   });
   it("Shoud have create method", () => {
     expect(store.create).toBeDefined();
+  });
+  it("Shoud have addProduct method", () => {
+    expect(store.addProduct).toBeDefined();
   });
 
   it("index method return list of orders", async () => {
@@ -42,14 +46,13 @@ describe("Order Model", () => {
 
   it("create method should add a order", async () => {
     const result = await store.create({
-      product_id: productInOrderId,
-      quantity: 10,
       user_id: userAddedOrdedId,
       status: "active",
     });
 
+    expect(parseInt(result.user_id as unknown as string)).toEqual(
+      userAddedOrdedId
+    );
     expect(result.status).toEqual("active");
-    expect(result.product_id).toEqual(productInOrderId);
-    expect(result.quantity).toEqual(10);
   });
 });
