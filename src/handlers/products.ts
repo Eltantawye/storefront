@@ -5,13 +5,23 @@ import { Product, ProductStore } from "../models/product";
 const store = new ProductStore();
 
 const index = async (_req: Request, res: Response) => {
-  const products = await store.index();
-  res.json(products);
+  try {
+    const products = await store.index();
+    res.json(products);
+  } catch (error) {
+    res.status(400);
+    res.json(error as string);
+  }
 };
 
 const show = async (_req: Request, res: Response) => {
-  const product = await store.show(_req.params.id);
-  res.json(product);
+  try {
+    const product = await store.show(_req.params.id);
+    res.json(product);
+  } catch (error) {
+    res.status(400);
+    res.json(error as string);
+  }
 };
 
 const create = async (req: Request, res: Response) => {
