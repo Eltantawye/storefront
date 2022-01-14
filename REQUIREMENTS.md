@@ -69,7 +69,19 @@ These are the notes from a meeting with the frontend developer that describe wha
 - id
 - name
 - price
+- [OPTIONAL] category
 
+| Col   | Type               |
+|-------|--------------------|
+| id    | SERIAL PRIMARY KEY |
+| name  | VARCHAR            |
+| price | FLOAT              |
+
+```sql
+TABLE products ( id SERIAL PRIMARY KEY,
+name VARCHAR,
+price FLOAT);
+```
 
 #### User
 
@@ -78,6 +90,21 @@ These are the notes from a meeting with the frontend developer that describe wha
 - lastName
 - password
 
+| Col       | Type               |
+|-----------|--------------------|
+| id        | SERIAL PRIMARY KEY |
+| firstName | VARCHAR(50)        |
+| lastName  | VARCHAR(50)        |
+| password  | VARCHAR            |
+
+```sql
+TABLE users ( id SERIAL PRIMARY  KEY,
+"firstName" VARCHAR(50),
+"lastName" VARCHAR(50),
+password VARCHAR);
+```
+
+
 #### Orders
 
 - id
@@ -85,3 +112,28 @@ These are the notes from a meeting with the frontend developer that describe wha
 - quantity of each product in the order
 - user_id
 - status of order (active or complete)
+
+| Col     | Type                                |
+|---------|-------------------------------------|
+| id      | SERIAL PRIMARY KEY                  |
+| status  | orders_status("active","completed") |
+| user_id | bigint REFERENCES users(id)         |
+
+
+```sql
+TYPE orders_status AS ENUM ('active', 'complete');
+TABLE orders (
+    id SERIAL PRIMARY KEY,
+    status orders_status,
+    user_id bigint REFERENCES users(id)
+);
+```
+* Orders_Products
+```sql
+TABLE orders_products (
+    id SERIAL PRIMARY KEY,
+    quantity integer,
+    order_id bigint REFERENCES orders(id),
+    product_id bigint REFERENCES products(id)
+);
+```
