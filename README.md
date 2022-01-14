@@ -30,6 +30,7 @@ CREATE DATABASE storefront_test;
 ```
 HOST = localhost
 DB= storefront
+DB_PORT=5432
 USER= fullstack
 PASSWORD= password123
 DB_TEST = storefront_test
@@ -45,6 +46,7 @@ TOKEN_SECRET=SECrEt
 ```
 npm run watch
 ```
+App will run on port ```:3000``` and DB port ```:5432```
 
 ### Testing
 

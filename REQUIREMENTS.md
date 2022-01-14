@@ -6,46 +6,27 @@ These are the notes from a meeting with the frontend developer that describe wha
 
 ## API Endpoints
 
-#### Products
-
-- Index: /products
-- Show: /products/:id
-- Create [token required]: /products
-- [OPTIONAL] Top 5 most popular products
-- [OPTIONAL] Products by category (args: product category)
-
 ### Users
-
-- Get all users
-
+* Get all users
 ```http
   GET /users  [token required]
 ```
-
-- Show user by id
-
+* Show user by id
 ```http
   GET /users/:id  [token required]
 ```
-
-- Create user
-
+* Create user
 ```http
   POST /users  [token required]
 ```
-
-- Authenticate user using user data
-
+* Authenticate user using user data
 ```http
-  GET /auth
+  GET /auth 
 ```
-
-- Seeding for creating user for testing purpose
-
+* Seeding for creating user for testing purpose
 ```http
-  POST /users
+  POST /users  
 ```
-
 ```http
 {
     firstName: "super",
@@ -55,43 +36,51 @@ These are the notes from a meeting with the frontend developer that describe wha
 ```
 
 ### Products
-
-- Get all products
-
+* Get all products 
 ```http
-  GET /products
+  GET /products  
 ```
-
-- Get products by id
-
+* Get products by it
 ```http
-  GET /products/:id
+  GET /products/:id 
 ```
-
-- Add products
-
+* Add products
 ```http
   POST /products [token required]
 ```
 
 ### Orders
-
-- Get all orders for the authenticated user
-
+* Get all orders for the authenticated user 
 ```http
   GET /orders  [token required]
 ```
-
-- add order
-
+* add order
 ```http
   POST /orders [token required]
 ```
-
-- Add products to order
-
+* Add products to order
 ```http
   POST /orders/:id/products [token required]
+```
+## Data Shapes
+
+#### Product
+
+- id
+- name
+- price
+- [OPTIONAL] category
+
+| Col   | Type               |
+|-------|--------------------|
+| id    | SERIAL PRIMARY KEY |
+| name  | VARCHAR            |
+| price | FLOAT              |
+
+```sql
+TABLE products ( id SERIAL PRIMARY KEY,
+name VARCHAR,
+price FLOAT);
 ```
 
 #### User
@@ -101,6 +90,21 @@ These are the notes from a meeting with the frontend developer that describe wha
 - lastName
 - password
 
+| Col       | Type               |
+|-----------|--------------------|
+| id        | SERIAL PRIMARY KEY |
+| firstName | VARCHAR(50)        |
+| lastName  | VARCHAR(50)        |
+| password  | VARCHAR            |
+
+```sql
+TABLE users ( id SERIAL PRIMARY  KEY,
+"firstName" VARCHAR(50),
+"lastName" VARCHAR(50),
+password VARCHAR);
+```
+
+
 #### Orders
 
 - id
@@ -108,3 +112,36 @@ These are the notes from a meeting with the frontend developer that describe wha
 - quantity of each product in the order
 - user_id
 - status of order (active or complete)
+
+| Col     | Type                                |
+|---------|-------------------------------------|
+| id      | SERIAL PRIMARY KEY                  |
+| status  | orders_status("active","completed") |
+| user_id | bigint REFERENCES users(id)         |
+
+
+```sql
+TYPE orders_status AS ENUM ('active', 'complete');
+TABLE orders (
+    id SERIAL PRIMARY KEY,
+    status orders_status,
+    user_id bigint REFERENCES users(id)
+);
+```
+* Orders_Products
+
+| Col        | Type                           |
+|------------|--------------------------------|
+| id         | SERIAL PRIMARY KEY             |
+| quantity   | integer                        |
+| order_id   | bigint REFERENCES orders(id)   |
+| product_id | bigint REFERENCES products(id) |
+
+```sql
+TABLE orders_products (
+    id SERIAL PRIMARY KEY,
+    quantity integer,
+    order_id bigint REFERENCES orders(id),
+    product_id bigint REFERENCES products(id)
+);
+```
