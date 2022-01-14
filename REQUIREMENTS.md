@@ -129,6 +129,14 @@ TABLE orders (
 );
 ```
 * Orders_Products
+
+| Col        | Type                           |
+|------------|--------------------------------|
+| id         | SERIAL PRIMARY KEY             |
+| quantity   | integer                        |
+| order_id   | bigint REFERENCES orders(id)   |
+| product_id | bigint REFERENCES products(id) |
+
 ```sql
 TABLE orders_products (
     id SERIAL PRIMARY KEY,
