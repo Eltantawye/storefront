@@ -23,8 +23,6 @@ const show = async (_req: Request, res: Response) => {
     res.status(400);
     res.json(error);
   }
-  const user = await store.show(_req.params.id);
-  res.json(user);
 };
 
 const authenticate = async (req: Request, res: Response) => {

@@ -119,6 +119,6 @@ var addProduct = function (_req, res) { return __awaiter(void 0, void 0, void 0,
 var orders_routes = function (app) {
     app.get("/orders", auth_1.verifyAuthToken, index);
     app.post("/orders", auth_1.verifyAuthToken, create);
-    app.post("/orders/:id/products", addProduct);
+    app.post("/orders/:id/products", auth_1.verifyAuthToken, addProduct);
 };
 exports["default"] = orders_routes;
